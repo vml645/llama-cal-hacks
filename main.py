@@ -2,7 +2,7 @@ import sys
 from printers import print_llm_response
 
 from llama_stack_client import Agent, LlamaStackClient
-client = LlamaStackClient(base_url="http://localhost:11434")
+client = LlamaStackClient(base_url="http://localhost:8321")
 from terminal_calling import call_terminal
 
 # Create the agent
