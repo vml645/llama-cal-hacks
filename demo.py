@@ -3,20 +3,6 @@ from llama_stack_client import Agent, AgentEventLogger, RAGDocument, LlamaStackC
 from terminal_calling import call_terminal
 from printers import print_llm_response
 
-def terminal_call(command: str) -> str:
-    """Run the command in a shell and return its stdout."""
-    print(f"Executing command: {command}")
-    result = subprocess.run(
-        command,
-        shell=True,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    output = result.stdout.strip()
-    print(f"Command output: {output}")
-    return output
-
 def setup_agent(vector_db_id="my_demo_vector_db", base_url="http://localhost:8321"):
     client = LlamaStackClient(base_url=base_url)
     models = client.models.list()
@@ -53,7 +39,7 @@ def setup_agent(vector_db_id="my_demo_vector_db", base_url="http://localhost:832
     agent2 = Agent(
         client,
         model=model_id,
-        instructions="You are a helpful assistant that can execute terminal commands when needed. Be careful with command execution and only run safe commands.",
+        instructions="You are a helpful assistant that can execute terminal commands when needed. Be careful with command execution and only run safe commands. Assume the user can see the commands you call, as well as their output.",
         tools=[call_terminal],
     )
     
