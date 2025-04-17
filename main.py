@@ -1,14 +1,22 @@
-
 import subprocess
 import openai
 import json
 import sys
 import os
+import dotenv
+import printers
+
+
+dotenv.load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+openai.api_key = OPENAI_API_KEY
 
 
 def terminal_call(command: str) -> str:
     """Run the command in a shell and return its stdout."""
-    print(f"$ {command}")
+    printers.print_command(command)
     result = subprocess.run(
         command,
         shell=True,
@@ -17,7 +25,7 @@ def terminal_call(command: str) -> str:
         check=True
     )
     output = result.stdout.strip()
-    print(output)
+    printers.print_command_output(output)
     return output
 
 
@@ -73,10 +81,10 @@ def main():
                 {"role": "function", "name": func_name, "content": result}
             ]
         )
-        print(follow_up.choices[0].message.content)
+        printers.print_llm_response(follow_up.choices[0].message.content)
     else:
         # if it didn’t call the function, just print its reply
-        print(msg.content)
+        printers.print_llm_response(msg.content)
 
 
 if __name__ == "__main__":
