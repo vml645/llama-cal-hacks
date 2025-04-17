@@ -1,5 +1,7 @@
 import subprocess
 from llama_stack_client import Agent, AgentEventLogger, RAGDocument, LlamaStackClient
+from terminal_calling import call_terminal
+from printers import print_llm_response
 
 def terminal_call(command: str) -> str:
     """Run the command in a shell and return its stdout."""
@@ -33,23 +35,29 @@ def setup_agent(vector_db_id="my_demo_vector_db", base_url="http://localhost:832
         provider_id="faiss",
     )
 
-    agent = Agent(
+    # agent = Agent(
+    #     client,
+    #     model=model_id,
+    #     instructions="You are a helpful assistant that can execute terminal commands when needed. Be careful with command execution and only run safe commands.",
+    #     tools=[
+    #         {
+    #             "name": "builtin::rag/knowledge_search",
+    #             "args": {"vector_db_ids": [vector_db_id]},
+    #         },
+    #         {
+    #             "name": "builtin::code_interpreter",
+    #             "args": {},
+    #         },
+    #     ],
+    # )
+    agent2 = Agent(
         client,
         model=model_id,
         instructions="You are a helpful assistant that can execute terminal commands when needed. Be careful with command execution and only run safe commands.",
-        tools=[
-            {
-                "name": "builtin::rag/knowledge_search",
-                "args": {"vector_db_ids": [vector_db_id]},
-            },
-            {
-                "name": "builtin::code_interpreter",
-                "args": {},
-            }
-        ],
+        tools=[call_terminal],
     )
     
-    return agent, client
+    return agent2, client
 
 def ingest_document(client, vector_db_id, source):
     print(f"rag_tool> Ingesting document: {source}")
