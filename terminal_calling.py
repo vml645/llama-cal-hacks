@@ -2,7 +2,10 @@ from printers import print_command, print_command_output, print_error_output
 import subprocess
 
 def call_terminal(command: str) -> str:
-    """ Calls the terminal and returns the output. Also prints the command and output to the console"""
+    """
+    Calls the terminal and returns the output. Also prints the command and output to the console
+    :param command: the specific command to be ran in the terminal
+    """
     print_command(command)
 
     result = subprocess.run(
