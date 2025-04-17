@@ -6,6 +6,24 @@ MAGENTA = '\033[95m'
 BOLD = '\033[1m'
 RESET = '\033[0m'
 
+def print_ls_for_llm(stdout: str) -> str:
+    """ prints the ls command formatted for the LLM """
+    # Split into lines and filter out any empties
+    entries = [line for line in stdout.strip().splitlines() if line]
+    if not entries:
+        return "No files or directories found."
+
+
+    # Sort alphabetically for consistency
+    entries.sort()
+
+    # Build the output lines
+    lines = ["Directory listing:", "```bash"]
+    lines += entries
+    lines.append("```")
+
+    # Join and return as one string
+    return "\n".join(lines)
 
 def print_command(command: str):
     """Prints the commands called by the LLM in a cyan box with spacing."""
@@ -28,6 +46,10 @@ def print_command_output(command_output: str):
     print(command_output)
     print("\n" + ("-" * 60) + "\n")  # Divider line after output
 
+
+def print_error_output(stderr: str):
+    """ Prints the stderr of the subprocess call result """
+    pass
 
 def print_llm_response(response: str):
     """Prints the output of the LLM in magenta with spacing."""
